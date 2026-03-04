@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Model Parameters Step Tests &mdash; Model Parameters Pipeline 0.2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Adding a New Transformation Step" href="adding-a-step.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Model Parameters Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="adding-a-step.html">Adding a New Transformation Step</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model Parameters Step Tests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-structure">Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-a-new-unit-test">Adding a New Unit Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-test-directory">1. Create Test Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-required-files">2. Create Required Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test-model-export-csv"><code class="docutils literal notranslate"><span class="pre">test-model-export.csv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-model-steps-csv"><code class="docutils literal notranslate"><span class="pre">test-model-steps.csv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-stepname-csv"><code class="docutils literal notranslate"><span class="pre">test-{stepname}.csv</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-expected-output">3. Generate Expected Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-tests-automatically">4. Run Tests Automatically</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-parameters-steps-reference">Model Parameters Steps Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#regenerating-expected-output">Regenerating Expected Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Model Parameters Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Model Parameters Step Tests</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/step-tests.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="model-parameters-step-tests">
+<h1>Model Parameters Step Tests<a class="headerlink" href="#model-parameters-step-tests" title="Link to this heading"></a></h1>
+<p>This section documents the unit tests for Model Parameters transformation
+steps. Each subdirectory under <code class="docutils literal notranslate"><span class="pre">tests/testdata/step-tests/</span></code> represents a test
+case for a specific transformation step.</p>
+<section id="directory-structure">
+<h2>Directory Structure<a class="headerlink" href="#directory-structure" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tests/testdata/step-tests/
+├── test-data.csv             # Shared test data used by all step tests
+├── test-variables.csv        # Shared variables definition file
+└── test-{stepname}/          # Test directory for a specific step
+    ├── test-model-export.csv # Model export file defining files for transformation
+    ├── test-model-steps.csv  # Model steps file defining transformation steps
+    ├── test-{stepname}.csv   # Step-specific parameters file
+    └── test-expected.csv     # Expected output (auto-generated)
+</pre></div>
+</div>
+</section>
+<section id="adding-a-new-unit-test">
+<h2>Adding a New Unit Test<a class="headerlink" href="#adding-a-new-unit-test" title="Link to this heading"></a></h2>
+<p>To add a unit test for a Model Parameters transformation step:</p>
+<section id="create-test-directory">
+<h3>1. Create Test Directory<a class="headerlink" href="#create-test-directory" title="Link to this heading"></a></h3>
+<p>Create a new subdirectory named <code class="docutils literal notranslate"><span class="pre">test-{stepname}</span></code> where <code class="docutils literal notranslate"><span class="pre">{stepname}</span></code> is the
+name of the transformation step you want to test.</p>
+</section>
+<section id="create-required-files">
+<h3>2. Create Required Files<a class="headerlink" href="#create-required-files" title="Link to this heading"></a></h3>
+<p>Each test directory must contain the following files:</p>
+<section id="test-model-export-csv">
+<h4><code class="docutils literal notranslate"><span class="pre">test-model-export.csv</span></code><a class="headerlink" href="#test-model-export-csv" title="Link to this heading"></a></h4>
+<p>This file defines the files used for the transformation. It generally has the
+same structure for each unit test:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>fileType,filePath
+variables,../test-variables.csv
+model-steps,./test-model-steps.csv
+</pre></div>
+</div>
+<p>The file references:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test-variables.csv</span></code> – The shared variables definition file (located in the
+parent directory)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test-model-steps.csv</span></code> – The model steps file (located in the test
+directory)</p></li>
+</ul>
+</section>
+<section id="test-model-steps-csv">
+<h4><code class="docutils literal notranslate"><span class="pre">test-model-steps.csv</span></code><a class="headerlink" href="#test-model-steps-csv" title="Link to this heading"></a></h4>
+<p>This file defines the transformation steps to execute. The structure is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>step,fileType,filePath,notes
+{stepname},N/A,./test-{stepname}.csv,
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">{stepname}</span></code> with your step name. If the step doesn’t require a
+separate file, use <code class="docutils literal notranslate"><span class="pre">N/A</span></code> for <code class="docutils literal notranslate"><span class="pre">fileType</span></code> and <code class="docutils literal notranslate"><span class="pre">filePath</span></code>.</p>
+</section>
+<section id="test-stepname-csv">
+<h4><code class="docutils literal notranslate"><span class="pre">test-{stepname}.csv</span></code><a class="headerlink" href="#test-stepname-csv" title="Link to this heading"></a></h4>
+<p>This file contains step-specific parameters. The structure depends on the
+transformation step being tested. For example, a logistic regression step would
+have the coefficients for each variable and the intercept. Refer to the <a class="reference external" href="https://big-life-lab.github.io/model-parameters/5-reference.html">Model
+Parameters documentation</a> for
+details on each step’s required parameters.</p>
+</section>
+</section>
+<section id="generate-expected-output">
+<h3>3. Generate Expected Output<a class="headerlink" href="#generate-expected-output" title="Link to this heading"></a></h3>
+<p>After creating your test files, generate the expected output by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From the project root directory</span>
+
+<span class="c1"># Generate expected output for all tests</span>
+python<span class="w"> </span>-m<span class="w"> </span>tests.generate_step_tests_expected
+
+<span class="c1"># Or generate for only your new test</span>
+python<span class="w"> </span>-m<span class="w"> </span>tests.generate_step_tests_expected<span class="w"> </span>stepname
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">generate_step_tests_expected</span></code> function in
+<code class="docutils literal notranslate"><span class="pre">tests/generate_step_tests_expected.py</span></code> will:</p>
+<ol class="arabic simple">
+<li><p>Read the shared test data from <code class="docutils literal notranslate"><span class="pre">test-data.csv</span></code></p></li>
+<li><p>Iterate through each subdirectory in the step-tests folder (or only
+specified steps)</p></li>
+<li><p>Run the model pipeline using each <code class="docutils literal notranslate"><span class="pre">test-model-export.csv</span></code> file</p></li>
+<li><p>Save the pipeline output as <code class="docutils literal notranslate"><span class="pre">test-expected.csv</span></code> in each subdirectory</p></li>
+</ol>
+<p>The generated <code class="docutils literal notranslate"><span class="pre">test-expected.csv</span></code> file will be used by the unit tests to
+verify correct transformation behavior.</p>
+<p>You can also call the function directly from Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tests.generate_step_tests_expected</span> <span class="kn">import</span> <span class="n">generate_step_tests_expected</span>
+
+<span class="c1"># Generate expected output for all tests</span>
+<span class="n">generate_step_tests_expected</span><span class="p">()</span>
+
+<span class="c1"># Or generate for only your new test</span>
+<span class="n">generate_step_tests_expected</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;stepname&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="run-tests-automatically">
+<h3>4. Run Tests Automatically<a class="headerlink" href="#run-tests-automatically" title="Link to this heading"></a></h3>
+<p>Once you’ve created your test directory and generated the expected output, your
+new unit test will be <strong>automatically discovered and run</strong> when the test suite
+executes. No additional registration or configuration is needed.</p>
+<p>The test automation is implemented in <code class="docutils literal notranslate"><span class="pre">tests/test_pipeline.py</span></code>, which:</p>
+<ol class="arabic simple">
+<li><p>Scans all subdirectories in the <code class="docutils literal notranslate"><span class="pre">step-tests/</span></code> folder</p></li>
+<li><p>Automatically runs each test it finds</p></li>
+<li><p>Compares the pipeline output against the <code class="docutils literal notranslate"><span class="pre">test-expected.csv</span></code> file</p></li>
+</ol>
+<p>To run all tests, execute:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+<p>Your new step test will be included automatically alongside all existing step
+tests.</p>
+</section>
+</section>
+<section id="model-parameters-steps-reference">
+<h2>Model Parameters Steps Reference<a class="headerlink" href="#model-parameters-steps-reference" title="Link to this heading"></a></h2>
+<p>For detailed information about available transformation steps and their
+parameters, see the <a class="reference external" href="https://big-life-lab.github.io/model-parameters/5-reference.html">Model Parameters Reference Documentation</a>.</p>
+</section>
+<section id="regenerating-expected-output">
+<h2>Regenerating Expected Output<a class="headerlink" href="#regenerating-expected-output" title="Link to this heading"></a></h2>
+<p>If you need to update the expected output after fixing a bug or updating
+transformation logic, follow the same process as described in section “3.
+Generate Expected Output” above. The <code class="docutils literal notranslate"><span class="pre">generate_step_tests_expected()</span></code> function
+can regenerate output for all tests or specific tests using the <code class="docutils literal notranslate"><span class="pre">steps</span></code>
+parameter.</p>
+<p>After regenerating, review the changes to ensure the new output is correct, then
+commit the updated <code class="docutils literal notranslate"><span class="pre">test-expected.csv</span></code> files.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="adding-a-step.html" class="btn btn-neutral float-left" title="Adding a New Transformation Step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Martin Wellman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

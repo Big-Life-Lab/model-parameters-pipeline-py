@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding a New Transformation Step &mdash; Model Parameters Pipeline 0.2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Model Parameters Step Tests" href="step-tests.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Model Parameters Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Adding a New Transformation Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-register-the-step-in-step-dispatch">Step 1: Register the Step in <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#location">Location</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-your-step">Add Your Step</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-the-step-function">Step 2: Create the Step Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-the-module">Create the Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#function-template">Function Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#key-components-explained">Key Components Explained</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example-center-step">Example: Center Step</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-add-unit-tests">Step 3: Add Unit Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reference-documentation">Reference Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checklist">Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-patterns">Common Patterns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#parsing-delimited-strings">Parsing Delimited Strings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#working-with-numeric-values">Working with Numeric Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-new-columns-safely">Creating New Columns Safely</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-multiple-columns">Adding Multiple Columns</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-tests.html">Model Parameters Step Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Model Parameters Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Adding a New Transformation Step</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/adding-a-step.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="adding-a-new-transformation-step">
+<h1>Adding a New Transformation Step<a class="headerlink" href="#adding-a-new-transformation-step" title="Link to this heading"></a></h1>
+<p>This guide explains how to add support for a new transformation step to the
+Model Parameters Pipeline, as defined by the <a class="reference external" href="https://big-life-lab.github.io/model-parameters/">Model Parameters repository</a>.</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>Adding a new transformation step requires three main tasks:</p>
+<ol class="arabic simple">
+<li><p><strong>Register the step</strong> in the <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code> dictionary in
+<code class="docutils literal notranslate"><span class="pre">pipeline.py</span></code></p></li>
+<li><p><strong>Create a new step module</strong> – Implement <code class="docutils literal notranslate"><span class="pre">run_step_{stepname}</span></code> in
+<code class="docutils literal notranslate"><span class="pre">src/model_parameters_pipeline/steps/{stepname}.py</span></code></p></li>
+<li><p><strong>Add unit tests</strong> – Create test files to verify correct behavior</p></li>
+</ol>
+</section>
+<section id="step-1-register-the-step-in-step-dispatch">
+<h2>Step 1: Register the Step in <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code><a class="headerlink" href="#step-1-register-the-step-in-step-dispatch" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">pipeline.py</span></code> module contains a <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code> dictionary that maps
+step names to their implementation functions. The <code class="docutils literal notranslate"><span class="pre">run</span></code> method uses this
+dictionary to dispatch each step.</p>
+<section id="location">
+<h3>Location<a class="headerlink" href="#location" title="Link to this heading"></a></h3>
+<p>Find the <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code> dictionary near the top of <code class="docutils literal notranslate"><span class="pre">pipeline.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_STEP_DISPATCH</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ModelPipeline</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;center&quot;</span><span class="p">:</span> <span class="n">run_step_center</span><span class="p">,</span>
+    <span class="s2">&quot;dummy&quot;</span><span class="p">:</span> <span class="n">run_step_dummy</span><span class="p">,</span>
+    <span class="s2">&quot;interaction&quot;</span><span class="p">:</span> <span class="n">run_step_interaction</span><span class="p">,</span>
+    <span class="s2">&quot;logistic-regression&quot;</span><span class="p">:</span> <span class="n">run_step_logistic_regression</span><span class="p">,</span>
+    <span class="s2">&quot;rcs&quot;</span><span class="p">:</span> <span class="n">run_step_rcs</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="add-your-step">
+<h3>Add Your Step<a class="headerlink" href="#add-your-step" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Import your new step function at the top of the file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_parameters_pipeline.steps.your_step_name</span> <span class="kn">import</span> <span class="n">run_step_your_step_name</span>
+</pre></div>
+</div>
+</li>
+<li><p>Add a new entry to <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">_STEP_DISPATCH</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ModelPipeline</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;center&quot;</span><span class="p">:</span> <span class="n">run_step_center</span><span class="p">,</span>
+    <span class="s2">&quot;dummy&quot;</span><span class="p">:</span> <span class="n">run_step_dummy</span><span class="p">,</span>
+    <span class="s2">&quot;interaction&quot;</span><span class="p">:</span> <span class="n">run_step_interaction</span><span class="p">,</span>
+    <span class="s2">&quot;logistic-regression&quot;</span><span class="p">:</span> <span class="n">run_step_logistic_regression</span><span class="p">,</span>
+    <span class="s2">&quot;rcs&quot;</span><span class="p">:</span> <span class="n">run_step_rcs</span><span class="p">,</span>
+    <span class="s2">&quot;your-step-name&quot;</span><span class="p">:</span> <span class="n">run_step_your_step_name</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p>The dictionary key (<code class="docutils literal notranslate"><span class="pre">&quot;your-step-name&quot;</span></code>) must match the exact step name
+as it appears in the Model Parameters specification and in users’
+<code class="docutils literal notranslate"><span class="pre">model-steps.csv</span></code> files.</p></li>
+<li><p>The function name (<code class="docutils literal notranslate"><span class="pre">run_step_your_step_name</span></code>) uses underscores instead
+of hyphens.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="step-2-create-the-step-function">
+<h2>Step 2: Create the Step Function<a class="headerlink" href="#step-2-create-the-step-function" title="Link to this heading"></a></h2>
+<p>Create a new module <code class="docutils literal notranslate"><span class="pre">src/model_parameters_pipeline/steps/{stepname}.py</span></code>
+containing a function named <code class="docutils literal notranslate"><span class="pre">run_step_{stepname}</span></code> that implements the
+transformation logic.</p>
+<section id="create-the-module">
+<h3>Create the Module<a class="headerlink" href="#create-the-module" title="Link to this heading"></a></h3>
+<p>Create a new file at <code class="docutils literal notranslate"><span class="pre">src/model_parameters_pipeline/steps/{stepname}.py</span></code>
+(replace <code class="docutils literal notranslate"><span class="pre">{stepname}</span></code> with your step name, using underscores).</p>
+</section>
+<section id="function-template">
+<h3>Function Template<a class="headerlink" href="#function-template" title="Link to this heading"></a></h3>
+<p>Use this template as a starting point:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;{Step Name} transformation step.</span>
+
+<span class="sd">{Brief description of what this step does and its purpose}.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">model_parameters_pipeline._utils</span> <span class="kn">import</span> <span class="n">verify_columns</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">model_parameters_pipeline.pipeline</span> <span class="kn">import</span> <span class="n">ModelPipeline</span>
+
+
+<span class="k">def</span> <span class="nf">run_step_</span><span class="p">{</span><span class="n">stepname</span><span class="p">}(</span><span class="n">mod</span><span class="p">:</span> <span class="n">ModelPipeline</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run {step name} transformation step.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mod: ModelPipeline instance (mutated in place).</span>
+<span class="sd">        file: Path to {step name} step specification CSV.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of output column names created by this step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mod</span><span class="o">.</span><span class="n">_add_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">step_data</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">verify_columns</span><span class="p">(</span>
+        <span class="n">step_data</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;column1&quot;</span><span class="p">,</span> <span class="s2">&quot;column2&quot;</span><span class="p">,</span> <span class="s2">&quot;column3&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;</span><span class="si">{stepname}</span><span class="s2"> step file&quot;</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">output_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">step_data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="c1"># Extract parameters from the specification</span>
+        <span class="n">param1</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;column1&quot;</span><span class="p">]</span>
+        <span class="n">param2</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;column2&quot;</span><span class="p">]</span>
+        <span class="n">param3</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;column3&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Implement your transformation logic here</span>
+        <span class="c1"># Example: mod.data[new_column] = mod.data[existing_column] * param</span>
+        <span class="n">output_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_column</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_columns</span>
+</pre></div>
+</div>
+</section>
+<section id="key-components-explained">
+<h3>Key Components Explained<a class="headerlink" href="#key-components-explained" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>File Location</strong>: Create your step function in
+<code class="docutils literal notranslate"><span class="pre">src/model_parameters_pipeline/steps/{stepname}.py</span></code>.</p></li>
+<li><p><strong>Function Signature</strong>:</p>
+<ul class="simple">
+<li><p>Always takes <code class="docutils literal notranslate"><span class="pre">mod</span></code> (<code class="docutils literal notranslate"><span class="pre">ModelPipeline</span></code> instance) and <code class="docutils literal notranslate"><span class="pre">file</span></code> (path to
+specification file)</p></li>
+<li><p>Input data is accessed and modified via <code class="docutils literal notranslate"><span class="pre">mod.data</span></code> (a pandas DataFrame)</p></li>
+<li><p>Always returns a <code class="docutils literal notranslate"><span class="pre">list[str]</span></code> of output column names</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ModelPipeline</span></code> import is under <code class="docutils literal notranslate"><span class="pre">TYPE_CHECKING</span></code> to avoid circular
+imports</p></li>
+</ul>
+</li>
+<li><p><strong>Load Specification File</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span><span class="o">.</span><span class="n">_add_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">step_data</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Always use these <code class="docutils literal notranslate"><span class="pre">ModelPipeline</span></code> methods to load files – never read files
+directly (e.g. with <code class="docutils literal notranslate"><span class="pre">pd.read_csv</span></code>). <code class="docutils literal notranslate"><span class="pre">_add_file</span></code> and <code class="docutils literal notranslate"><span class="pre">_get_file</span></code> ensure
+that any file path is validated against the sandbox path, if one was
+specified when constructing the <code class="docutils literal notranslate"><span class="pre">ModelPipeline</span></code>. This prevents steps from
+reading files outside the permitted directory.</p>
+</li>
+<li><p><strong>Verify Columns</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">verify_columns</span><span class="p">(</span>
+    <span class="n">step_data</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;column1&quot;</span><span class="p">,</span> <span class="s2">&quot;column2&quot;</span><span class="p">,</span> <span class="s2">&quot;column3&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;</span><span class="si">{stepname}</span><span class="s2"> step file&quot;</span><span class="p">,</span>
+    <span class="n">file</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Validates that the specification file contains all required columns. Update
+the column list to match your step’s requirements from the Model Parameters
+documentation. Import <code class="docutils literal notranslate"><span class="pre">verify_columns</span></code> from
+<code class="docutils literal notranslate"><span class="pre">model_parameters_pipeline._utils</span></code>.</p>
+</li>
+<li><p><strong>Process Each Row</strong>: The <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">_,</span> <span class="pre">row</span> <span class="pre">in</span> <span class="pre">step_data.iterrows()</span></code> loop
+processes each row in the specification file. Each row typically defines one
+transformation to apply.</p></li>
+<li><p><strong>Access and Write Data</strong>:</p>
+<ul class="simple">
+<li><p>Read a column: <code class="docutils literal notranslate"><span class="pre">mod.data[column_name]</span></code> (returns a pandas Series)</p></li>
+<li><p>Write a column: <code class="docutils literal notranslate"><span class="pre">mod.data[new_column]</span> <span class="pre">=</span> <span class="pre">transformed_values</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Track Output Columns</strong>: Append each new column name to
+<code class="docutils literal notranslate"><span class="pre">output_columns</span></code> so the pipeline knows which columns this step produced.</p></li>
+</ol>
+</section>
+<section id="example-center-step">
+<h3>Example: Center Step<a class="headerlink" href="#example-center-step" title="Link to this heading"></a></h3>
+<p>Here’s a real example from the existing codebase (<code class="docutils literal notranslate"><span class="pre">steps/center.py</span></code>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">run_step_center</span><span class="p">(</span><span class="n">mod</span><span class="p">:</span> <span class="n">ModelPipeline</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run center transformation step.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mod: ModelPipeline instance (mutated in place).</span>
+<span class="sd">        file: Path to center step specification CSV.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of output column names created by this step.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mod</span><span class="o">.</span><span class="n">_add_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">step_data</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">_get_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="n">verify_columns</span><span class="p">(</span>
+        <span class="n">step_data</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;origVariable&quot;</span><span class="p">,</span> <span class="s2">&quot;centerValue&quot;</span><span class="p">,</span> <span class="s2">&quot;centeredVariable&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;center step file&quot;</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">output_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">step_data</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="n">orig_variable</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;origVariable&quot;</span><span class="p">]</span>
+        <span class="n">center_value</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;centerValue&quot;</span><span class="p">]</span>
+        <span class="n">centered_variable</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;centeredVariable&quot;</span><span class="p">]</span>
+
+        <span class="n">mod</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">centered_variable</span><span class="p">]</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">orig_variable</span><span class="p">]</span> <span class="o">-</span> <span class="n">center_value</span>
+        <span class="n">output_columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">centered_variable</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_columns</span>
+</pre></div>
+</div>
+<p>This function:</p>
+<ul class="simple">
+<li><p>Is defined in its own module <code class="docutils literal notranslate"><span class="pre">steps/center.py</span></code></p></li>
+<li><p>Accepts <code class="docutils literal notranslate"><span class="pre">mod</span></code> (a <code class="docutils literal notranslate"><span class="pre">ModelPipeline</span></code> instance) and <code class="docutils literal notranslate"><span class="pre">file</span></code>; data is accessed
+via <code class="docutils literal notranslate"><span class="pre">mod.data</span></code></p></li>
+<li><p>Loads the center specification file using <code class="docutils literal notranslate"><span class="pre">mod._add_file</span></code> /
+<code class="docutils literal notranslate"><span class="pre">mod._get_file</span></code></p></li>
+<li><p>Verifies it has the required columns (<code class="docutils literal notranslate"><span class="pre">origVariable</span></code>, <code class="docutils literal notranslate"><span class="pre">centerValue</span></code>,
+<code class="docutils literal notranslate"><span class="pre">centeredVariable</span></code>)</p></li>
+<li><p>For each row, creates a new centered variable by subtracting <code class="docutils literal notranslate"><span class="pre">centerValue</span></code>
+from the original variable in <code class="docutils literal notranslate"><span class="pre">mod.data</span></code></p></li>
+<li><p>Returns a list of the new column names</p></li>
+</ul>
+</section>
+</section>
+<section id="step-3-add-unit-tests">
+<h2>Step 3: Add Unit Tests<a class="headerlink" href="#step-3-add-unit-tests" title="Link to this heading"></a></h2>
+<p>Unit tests ensure your transformation step works correctly. The testing
+framework automatically discovers and runs tests based on directory structure.</p>
+<p>See <a class="reference internal" href="step-tests.html"><span class="doc">Model Parameters Step Tests</span></a> for complete instructions.</p>
+</section>
+<section id="reference-documentation">
+<h2>Reference Documentation<a class="headerlink" href="#reference-documentation" title="Link to this heading"></a></h2>
+<p>For detailed information about Model Parameters transformation steps and their
+required file formats, see:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://big-life-lab.github.io/model-parameters/5-reference.html">Model Parameters Reference Documentation</a></p></li>
+<li><p><a class="reference internal" href="step-tests.html"><span class="doc">Model Parameters Step Tests</span></a></p></li>
+</ul>
+</section>
+<section id="checklist">
+<h2>Checklist<a class="headerlink" href="#checklist" title="Link to this heading"></a></h2>
+<p>Use this checklist when adding a new transformation step:</p>
+<ul class="simple">
+<li><p>Create new module: <code class="docutils literal notranslate"><span class="pre">src/model_parameters_pipeline/steps/{stepname}.py</span></code></p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">run_step_{stepname}</span></code> function with type hints and docstring</p></li>
+<li><p>Import and add entry to <code class="docutils literal notranslate"><span class="pre">_STEP_DISPATCH</span></code> in <code class="docutils literal notranslate"><span class="pre">pipeline.py</span></code></p></li>
+<li><p>Verify column names match the Model Parameters specification</p></li>
+<li><p>Create test directory: <code class="docutils literal notranslate"><span class="pre">tests/testdata/step-tests/test-{stepname}/</span></code></p></li>
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">test-model-export.csv</span></code> in test directory</p></li>
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">test-model-steps.csv</span></code> in test directory</p></li>
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">test-{stepname}.csv</span></code> with test parameters in test directory</p></li>
+<li><p>Generate expected output using <code class="docutils literal notranslate"><span class="pre">generate_step_tests_expected()</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pytest</span></code> to verify tests pass</p></li>
+<li><p>Review and commit all changes including <code class="docutils literal notranslate"><span class="pre">test-expected.csv</span></code></p></li>
+</ul>
+</section>
+<section id="common-patterns">
+<h2>Common Patterns<a class="headerlink" href="#common-patterns" title="Link to this heading"></a></h2>
+<section id="parsing-delimited-strings">
+<h3>Parsing Delimited Strings<a class="headerlink" href="#parsing-delimited-strings" title="Link to this heading"></a></h3>
+<p>Some steps use delimited strings (e.g., “var1;var2;var3”) in their parameters
+file. Use the helper function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_parameters_pipeline._utils</span> <span class="kn">import</span> <span class="n">get_string_parts</span>
+
+<span class="n">parts</span> <span class="o">=</span> <span class="n">get_string_parts</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;columnName&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-numeric-values">
+<h3>Working with Numeric Values<a class="headerlink" href="#working-with-numeric-values" title="Link to this heading"></a></h3>
+<p>Convert string values to numeric when needed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_parameters_pipeline._utils</span> <span class="kn">import</span> <span class="n">get_string_parts</span>
+
+<span class="n">numeric_values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">get_string_parts</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;knots&quot;</span><span class="p">])]</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-new-columns-safely">
+<h3>Creating New Columns Safely<a class="headerlink" href="#creating-new-columns-safely" title="Link to this heading"></a></h3>
+<p>To avoid column name conflicts:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_parameters_pipeline._utils</span> <span class="kn">import</span> <span class="n">get_unused_column</span>
+
+<span class="n">new_col</span> <span class="o">=</span> <span class="n">get_unused_column</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;prefix_&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-multiple-columns">
+<h3>Adding Multiple Columns<a class="headerlink" href="#adding-multiple-columns" title="Link to this heading"></a></h3>
+<p>You can add multiple columns at once using numpy array assignment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># vals is a 2D numpy array with one column per variable</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">some_computation</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">variable</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">col_idx</span><span class="p">,</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variable_names</span><span class="p">):</span>
+    <span class="n">mod</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[:,</span> <span class="n">col_idx</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="getting-help">
+<h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>For Model Parameters specification questions, refer to the <a class="reference external" href="https://big-life-lab.github.io/model-parameters/">Model Parameters
+documentation</a></p></li>
+<li><p>For existing step implementation examples, see modules like
+<code class="docutils literal notranslate"><span class="pre">steps/center.py</span></code>, <code class="docutils literal notranslate"><span class="pre">steps/dummy.py</span></code>, etc.</p></li>
+<li><p>For testing questions, see <code class="docutils literal notranslate"><span class="pre">tests/testdata/step-tests/README.md</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="step-tests.html" class="btn btn-neutral float-right" title="Model Parameters Step Tests" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Martin Wellman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

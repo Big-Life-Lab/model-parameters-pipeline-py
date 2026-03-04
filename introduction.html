@@ -1,0 +1,388 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; Model Parameters Pipeline 0.2.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Adding a New Transformation Step" href="adding-a-step.html" />
+    <link rel="prev" title="Model Parameters Pipeline" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Model Parameters Pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-the-model-parameters-specification">What is the Model Parameters Specification?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#supported-transformations">Supported Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-dataframes-for-input-data">Using DataFrames for Input Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processing-multiple-datasets">Processing Multiple Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#method-chaining">Method Chaining</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restricting-file-access-with-sandbox-path">Restricting File Access with <code class="docutils literal notranslate"><span class="pre">sandbox_path</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#working-with-results">Working with Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#real-world-example-htnport-model">Real-World Example: HTNPoRT Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="adding-a-step.html">Adding a New Transformation Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-tests.html">Model Parameters Step Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Model Parameters Pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The Model Parameters Pipeline is a Python package for applying transformations
+to data according to the <a class="reference external" href="https://github.com/Big-Life-Lab/model-parameters">Model Parameters</a> specification developed by
+Big Life Lab. This package implements a pipeline for sequential data
+transformations that are commonly used in predictive health models.</p>
+<p>This guide will walk you through:</p>
+<ol class="arabic simple">
+<li><p>Understanding the Model Parameters specification</p></li>
+<li><p>Setting up your model configuration files</p></li>
+<li><p>Running the transformation pipeline</p></li>
+<li><p>Working with the results</p></li>
+</ol>
+</section>
+<section id="what-is-the-model-parameters-specification">
+<h2>What is the Model Parameters Specification?<a class="headerlink" href="#what-is-the-model-parameters-specification" title="Link to this heading"></a></h2>
+<p>The Model Parameters specification is a standardized way to define and apply
+data transformations used in predictive algorithms. It was developed by Big Life
+Lab for their predictive health models such as:</p>
+<ul class="simple">
+<li><p><strong>HTNPoRT</strong>: Hypertension Population Risk Tool</p></li>
+<li><p><strong>DemPoRT</strong>: Dementia Population Risk Tool</p></li>
+<li><p><strong>CVDPoRT</strong>: Cardiovascular Disease Population Risk Tool</p></li>
+<li><p><strong>MPoRT</strong>: Mortality Population Risk Tool</p></li>
+</ul>
+<p>The specification uses CSV files to define transformations, making algorithms:</p>
+<ul class="simple">
+<li><p><strong>Transparent</strong>: All parameters and transformations are documented in
+human-readable files</p></li>
+<li><p><strong>Portable</strong>: The same model can be deployed across different platforms and
+programming languages</p></li>
+<li><p><strong>Reproducible</strong>: Transformations are applied consistently</p></li>
+</ul>
+</section>
+<section id="supported-transformations">
+<h2>Supported Transformations<a class="headerlink" href="#supported-transformations" title="Link to this heading"></a></h2>
+<p>The pipeline supports five types of transformations:</p>
+<ol class="arabic simple">
+<li><p><strong>Center</strong>: Subtracts a constant value from variables (e.g., age - 50)</p></li>
+<li><p><strong>Dummy</strong>: Creates binary indicator variables for categorical values</p></li>
+<li><p><strong>Interaction</strong>: Multiplies variables together to create interaction terms</p></li>
+<li><p><strong>RCS</strong>: Applies restricted cubic spline transformations for non-linear
+relationships</p></li>
+<li><p><strong>Logistic Regression</strong>: Applies logistic regression to generate predictions</p></li>
+</ol>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Prerequisites:</p>
+<ul class="simple">
+<li><p>Python &gt;= 3.10</p></li>
+<li><p>pandas &gt;= 2.0</p></li>
+<li><p>numpy &gt;= 1.24</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install from GitHub (if published)</span>
+pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/Big-Life-Lab/model-parameters-pipeline-py.git
+
+<span class="c1"># Or install from local source</span>
+pip<span class="w"> </span>install<span class="w"> </span>/path/to/model-parameters-pipeline-py
+</pre></div>
+</div>
+<p>Install in development mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="s2">&quot;.[dev]&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h2>
+<p>The package uses a class-based workflow with three steps:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ModelPipeline(...)</span></code> – Load and validate model configuration files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.run(...)</span></code> – Apply transformations to data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.get_output(...)</span></code> – Extract results</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">model_parameters_pipeline</span> <span class="kn">import</span> <span class="n">ModelPipeline</span>
+
+<span class="c1"># Step 1: Create the pipeline (loads and validates configuration)</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span><span class="s2">&quot;path/to/model-export.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 2: Run the pipeline on your data</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;path/to/input-data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Step 3: Extract the output as a DataFrame</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+
+<span class="c1"># View the first few rows</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="using-dataframes-for-input-data">
+<h2>Using DataFrames for Input Data<a class="headerlink" href="#using-dataframes-for-input-data" title="Link to this heading"></a></h2>
+<p>You can pass a pandas DataFrame instead of a file path for the input data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Create the pipeline</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span><span class="s2">&quot;path/to/model-export.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load and preprocess your data</span>
+<span class="n">input_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;path/to/input-data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run pipeline with DataFrame</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="n">input_data</span><span class="p">)</span>
+
+<span class="c1"># Extract the output</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is useful when your data is already loaded or needs preprocessing.</p>
+</section>
+<section id="processing-multiple-datasets">
+<h2>Processing Multiple Datasets<a class="headerlink" href="#processing-multiple-datasets" title="Link to this heading"></a></h2>
+<p>If you need to apply the same model to multiple datasets (e.g., processing
+batches), reuse the pipeline object for better performance:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the pipeline once -- configuration files are loaded and cached</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span><span class="s2">&quot;path/to/model-export.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run on multiple datasets using method chaining</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;batch1_data.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;batch2_data.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+<span class="n">result3</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;batch3_data.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This avoids re-reading and parsing the configuration files for each batch.</p>
+</section>
+<section id="method-chaining">
+<h2>Method Chaining<a class="headerlink" href="#method-chaining" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">run()</span></code> returns <code class="docutils literal notranslate"><span class="pre">self</span></code>, so you can chain calls:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span><span class="s2">&quot;path/to/model-export.csv&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;path/to/input-data.csv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="restricting-file-access-with-sandbox-path">
+<h2>Restricting File Access with <code class="docutils literal notranslate"><span class="pre">sandbox_path</span></code><a class="headerlink" href="#restricting-file-access-with-sandbox-path" title="Link to this heading"></a></h2>
+<p>When running on a server or any public-facing system, the model configuration
+files can reference arbitrary paths on the filesystem. Use the <code class="docutils literal notranslate"><span class="pre">sandbox_path</span></code>
+parameter to restrict which files the pipeline is allowed to read.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span>
+    <span class="s2">&quot;path/to/model-files/model-export.csv&quot;</span><span class="p">,</span>
+    <span class="n">sandbox_path</span><span class="o">=</span><span class="s2">&quot;path/to/model-files/&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">sandbox_path</span></code> is set, every file referenced inside the model
+configuration (the model export, variables file, model-steps file, and any
+step parameter files) must be located within that directory. If any path
+resolves outside of it, the constructor raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>.</p>
+<p>This restriction applies only to the <strong>model configuration files</strong> – it does
+not affect data files passed to <code class="docutils literal notranslate"><span class="pre">run()</span></code>. It does, however, affect the model
+export file passed to the constructor.</p>
+<p><strong>When to use it:</strong></p>
+<ul class="simple">
+<li><p>You expose the pipeline as a web service or API and the model export path
+(or paths inside it) could be influenced by user input.</p></li>
+<li><p>You want to enforce that a model package stays self-contained within a
+specific directory and never reads files from elsewhere on the filesystem.</p></li>
+</ul>
+<p><strong>When you can omit it:</strong></p>
+<ul class="simple">
+<li><p>You are running the pipeline locally in a trusted environment where all
+model files are under your control and path traversal is not a concern.
+The default (<code class="docutils literal notranslate"><span class="pre">sandbox_path=None</span></code>) imposes no restriction.</p></li>
+</ul>
+</section>
+<section id="working-with-results">
+<h2>Working with Results<a class="headerlink" href="#working-with-results" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">run()</span></code> applies transformations in place and returns <code class="docutils literal notranslate"><span class="pre">self</span></code> for method
+chaining. Use <code class="docutils literal notranslate"><span class="pre">get_output()</span></code> to extract a DataFrame. The <code class="docutils literal notranslate"><span class="pre">mode</span></code> argument
+(default <code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>) controls what columns are returned:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;output&quot;</span></code>: only the columns produced by the final transformation step</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code>: all columns – original predictors plus every intermediate and
+output column</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="s2">&quot;path/to/input-data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Default mode: only the final step&#39;s output columns</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">get_output</span><span class="p">()</span>
+
+<span class="c1"># Full mode: all columns including intermediate transformation variables</span>
+<span class="n">output_full</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+
+<span class="c1"># If the model includes a logistic-regression step, extract predictions</span>
+<span class="c1"># Logistic predictions are stored in columns starting with &quot;logistic_&quot;</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">output_full</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^logistic_&quot;</span><span class="p">)</span>
+
+<span class="c1"># View column names to see what transformations were created</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output_full</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="real-world-example-htnport-model">
+<h2>Real-World Example: HTNPoRT Model<a class="headerlink" href="#real-world-example-htnport-model" title="Link to this heading"></a></h2>
+<p>The HTNPoRT (Hypertension Population Risk Tool) is a validated predictive model
+for hypertension risk. Here’s how to use this package with HTNPoRT:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the HTNPoRT repository to get model parameters and validation data</span>
+<span class="c1"># In your terminal:</span>
+<span class="c1"># git clone https://github.com/Big-Life-Lab/htnport.git</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">model_parameters_pipeline</span> <span class="kn">import</span> <span class="n">ModelPipeline</span>
+
+<span class="c1"># Set path to cloned HTNPoRT repository</span>
+<span class="n">htnport_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/path/to/htnport&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load validation data</span>
+<span class="n">data_file</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">htnport_dir</span>
+    <span class="o">/</span> <span class="s2">&quot;output/validation-data/HTNPoRT-female-validation-data.csv&quot;</span>
+<span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span>
+
+<span class="c1"># View the input data structure</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Path to model export file</span>
+<span class="n">model_export_file</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">htnport_dir</span>
+    <span class="o">/</span> <span class="s2">&quot;output/logistic-model-export/female/HTNPoRT-female-model-export.csv&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Create and run the pipeline, extract full output</span>
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">ModelPipeline</span><span class="p">(</span><span class="n">model_export_file</span><span class="p">)</span>
+<span class="n">pipeline</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dat</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+<span class="n">result_full</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">get_output</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+
+<span class="c1"># View the transformed data with all intermediate steps</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result_full</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Extract logistic predictions (hypertension risk probabilities)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">result_full</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^logistic_&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Summary statistics of predictions</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>For detailed information about the Model Parameters specification, see the
+<a class="reference external" href="https://big-life-lab.github.io/model-parameters/5-reference.html">Model Parameters Reference Documentation</a></p></li>
+<li><p>To add new transformation steps, see the
+<a class="reference external" href="https://github.com/Big-Life-Lab/model-parameters-pipeline-py/blob/main/CONTRIBUTING.md#adding-a-new-transformation-step">Adding a New Transformation Step</a>
+guide</p></li>
+<li><p>To report issues or request features, visit the
+<a class="reference external" href="https://github.com/Big-Life-Lab/model-parameters-pipeline-py/issues">issue tracker</a></p></li>
+</ul>
+</section>
+<section id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/Big-Life-Lab">Big Life Lab GitHub</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Big-Life-Lab/model-parameters">Model Parameters Specification</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Big-Life-Lab/htnport">HTNPoRT Model</a></p></li>
+<li><p><a class="reference external" href="https://github.com/Big-Life-Lab/predictive-algorithms">Predictive Algorithms Repository</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Model Parameters Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="adding-a-step.html" class="btn btn-neutral float-right" title="Adding a New Transformation Step" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Martin Wellman.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
