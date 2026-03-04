@@ -4,7 +4,7 @@
 [![test](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/test.yaml/badge.svg?branch=first)](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/test.yaml)
 [![lint](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/lint.yaml/badge.svg?branch=first)](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/lint.yaml)
 [![docs](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/sphinx.yaml/badge.svg?branch=first)](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/sphinx.yaml)
-[![Pyodide wheel](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/release-pyodide-wheel.yaml/badge.svg?branch=first)](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/release-pyodide-wheel.yaml)
+[![Pyodide wheel](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/release-pyodide-wheel.yaml/badge.svg)](https://github.com/Big-Life-Lab/model-parameters-pipeline-py/actions/workflows/release-pyodide-wheel.yaml)
 <!-- badges: end -->
 
 A Python package for applying sequential data transformations according to the
