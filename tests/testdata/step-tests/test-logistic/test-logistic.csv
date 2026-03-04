@@ -1,0 +1,6 @@
+﻿variable,coefficient
+Intercept,-0.015
+var_a,-0.0123
+var_b,0.0145
+var_c,0.0555
+group_b,1.8

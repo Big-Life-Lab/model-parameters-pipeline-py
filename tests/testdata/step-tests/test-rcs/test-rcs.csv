@@ -1,0 +1,3 @@
+﻿variable,rcsVariables,knots
+var_a,var_a_rcs_1;var_a_rcs_2;var_a_rcs_3,-150;20;100;350
+var_b,var_b_rcs_1;var_b_rcs_2,-300.5;-101.8;250.0

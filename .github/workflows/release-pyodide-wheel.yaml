@@ -1,0 +1,32 @@
+# Build a Pyodide-compatible wheel and attach it to the GitHub release.
+# Python equivalent of the R project's release-file-system-image.yaml.
+on:
+  release:
+    types: [published]
+
+name: Build Pyodide wheel
+
+jobs:
+  build-pyodide-wheel:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pyodide-build
+        run: pip install pyodide-build
+
+      - name: Build Pyodide wheel
+        run: pyodide build .
+
+      - name: Upload wheel to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.whl

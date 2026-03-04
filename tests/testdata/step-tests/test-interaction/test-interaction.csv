@@ -1,0 +1,5 @@
+﻿interactingVariables,interactionVariable
+var_a;var_b,var_a_X_var_b
+var_a;var_b;var_c,var_a_X_var_b_X_var_c
+var_a;var_b;var_c,var_a_X_var_b_X_var_c
+group_b;var_a;var_b;var_c,group_b_X_var_a_X_var_b_X_var_c
